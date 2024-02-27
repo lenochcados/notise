@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js'>
+    </script>
+    <script type='text/javascript' src='DateFormat.js'></script>
+    <script src='knockout-es5.min.js'></script>
+    <title>Мои заметки</title>
+</head>
+
+<body>
+    <div class="container">
+        <span class="title">Мои заметки</span>
+        <div class="cards">
+            <div class="deck" data-bind=" foreach: all_notes">
+                <div class="card">
+                    <div class="cardHeader">
+                        <!-- ko ifnot: m_.put().id === $data.id -->
+                        <span data-bind="text: $data.title"></span>
+                        <!-- /ko -->
+                        <!-- ko if: m_.put().id === $data.id -->
+                        <input type="text" id="edit_title" name="title"
+                            data-bind=" textInput: m_.edit_title, value: $data.title" />
+                        <!-- /ko -->
+                    </div>
+                    <div class="cardBody">
+                        <!-- ko ifnot: m_.put().id === $data.id -->
+                        <p data-bind="text: $data.body"></p>
+                        <!-- /ko -->
+                        <!-- ko if: m_.put().id == $data.id -->
+                        <textarea type="text" id="edit_body" name="body"
+                            data-bind="textInput: edit_body, value: $data.body"></textarea>
+                        <!-- /ko -->
+                    </div>
+                    <!-- ko ifnot: m_.put().id == $data.id -->
+                    <div class="cardFooter" data-bind="text: dateFormat($data.date, 'mmmm dS, yyyy, h:MM:ss TT')"></div>
+                    <img src="../assets/icons/remove.svg" alt="delete" class="img_x" data-bind="click: m_.del">
+                    <img src="../assets/icons/pencil.svg" alt="edit" class="img_edit" data-bind="click: m_.put">
+                    <!-- /ko -->
+                    <!-- ko if: m_.put().id == $data.id -->
+                    <img src="../assets/icons/remove.svg" alt="close" class="img_x" onclick="put(0)">
+                    <bottom class="save" type="button" data-bind="click: m_.edit">Save</bottom>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <img src="../assets/icons/plus.svg" alt="+" class="img_plus" onclick=plus(true)>
+        <!-- ko if: plus() -->
+        <div class="deck">
+            <div class="card">
+                <div class="cardHeader">
+                    <input type="text" id="title" name="title" placeholder="Title"
+                        data-bind="textInput: m_.new_title" />
+                </div>
+                <div class="cardBody">
+                    <p>
+                        <textarea type="text" id="body" name="body" placeholder="Body"
+                            data-bind="textInput: m_.new_body"></textarea>
+                    </p>
+                </div>
+                <bottom class="save" type="button" onclick="m_.post()">Save</bottom>
+                <img src="../assets/icons/remove.svg" alt="close" class="img_x" onclick="plus(false)">
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+</body>
+
+</html>
+
+<script src="Note.js"></script>
+<!-- <script src="index.js"></script> -->
